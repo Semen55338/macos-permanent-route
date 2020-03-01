@@ -1,11 +1,13 @@
 #!/bin/bash
 
+LaunchDaemon="/Library/LaunchDaemons/net.staticroute.plist"
+
 if [ "$EUID" -ne 0 ]
-  then echo "Для запуска требуется пользователь root"
+  then echo "Only root can run this"
   exit
 fi
 
-cat > /Library/LaunchDaemons/net.staticroute.plist << EOF
+[ ! -f $LaunchDaemon ] && cat > $LaunchDaemon << EOF
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
@@ -20,4 +22,4 @@ cat > /Library/LaunchDaemons/net.staticroute.plist << EOF
 </plist>
 EOF
 
-launchctl load -w /Library/LaunchDaemons/net.staticroute.plist
+launchctl load -w $LaunchDaemon 
